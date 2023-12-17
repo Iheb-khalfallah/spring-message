@@ -4,9 +4,9 @@
  */
 package com.tpframework.springmessage.messageservice;
 
-import com.tpframework.springmessage.messagerepository.MessageRepository;
+import com.tpframework.springmessage.model.MessageRepository;
 import com.tpframework.springmessage.model.LpMessage;
-import jakarta.persistence.EntityManager;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,25 +19,20 @@ import org.springframework.stereotype.Service;
 public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
-    
-    @Autowired
-    public EntityManager em;
 
-    public List<LpMessage> Whatsup(String to) throws InterruptedException{
-        while(true){
-            List<LpMessage> li= (List<LpMessage>) em.createQuery("SELECT x FROM LpMessage WHERE x.to=:v ORDER BY x.dto",LpMessage.class)
-                    .setParameter("v", to)
-                    .getResultList();
-            if (li.isEmpty()){
+    public List<LpMessage> Whatsup(String to) throws InterruptedException {
+        while (true) {
+            List<LpMessage> li = messageRepository.findByRecipientOrderByDto(to);
+            if (li.isEmpty()) {
                 Thread.sleep(1000);
-            }else{
+            } else {
                 LpMessage m = li.get(0);
-                em.remove(m);
+                messageRepository.delete(m);
                 return li;
             }
         }
     }
-    
+
     public void send(String to, String content) {
         LpMessage message = new LpMessage();
         message.setTo(to);
@@ -45,3 +40,4 @@ public class MessageService {
         messageRepository.save(message);
     }
 }
+

@@ -4,11 +4,8 @@
  */
 package com.tpframework.springmessage.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
@@ -16,27 +13,25 @@ import java.time.LocalDateTime;
  * @author iheb_kh
  */
 
+
 @Entity
 public class LpMessage {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     public String content;
-    public String to;
+    public String recipient;
     public LocalDateTime dto = LocalDateTime.now();
-    
-    public void setContent(String content){
-        this.content=content;
-    } 
-    
+
+    public void setContent(String content){ this.content=content; }
+
     public String getContent(){
         return this.content;
     } 
     
-    public void setTo(String to){
-        this.to=to;
+    public void setTo(String recipient){
+        this.recipient=recipient;
     } 
     
     public void setDto(LocalDateTime dto){

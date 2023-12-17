@@ -25,14 +25,14 @@ public class MessageController {
     private MessageService message_service;
 
     @GetMapping("/get-real-time-message/{to}")
-    public List<LpMessage> MessageController (@PathVariable("to") String to) throws InterruptedException {
+    public List<LpMessage> MessageSender (@PathVariable("to") String to) throws InterruptedException {
         return message_service.Whatsup(to);
     }
     
     @PostMapping("/send-message")
     public ResponseEntity<String> send(@RequestBody LpMessage m){
         try {
-            message_service.send(m.to, m.content);
+            message_service.send(m.recipient, m.content);
             return ResponseEntity.ok("Message sent successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error sending message: " + e.getMessage());
